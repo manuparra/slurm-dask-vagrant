@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
       sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
       dnf install -y epel-release
       dnf config-manager --set-enabled powertools
-      dnf install -y munge
+      dnf install -y munge wget git 
       echo 123456789123456781234567812345678 > /etc/munge/munge.key
       chown munge:munge /etc/munge/munge.key
       chmod 600 /etc/munge/munge.key
@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
     node.vm.provision "shell" do |s|
       s.privileged = true,
       s.inline = %q(
-        dnf install -y slurm-slurmctld
+        dnf install -y slurm-slurmctld wget git 
         ln -sf /vagrant/slurm.conf /etc/slurm/slurm.conf
         systemctl restart slurmctld
       )
@@ -56,7 +56,7 @@ Vagrant.configure("2") do |config|
       node.vm.provision "shell" do |s|
         s.privileged = true,
         s.inline = %q(
-          dnf install -y slurm-slurmd
+          dnf install -y slurm-slurmd wget git 
           echo 'SLURMD_OPTIONS=--conf-server rm1' >> /etc/sysconfig/slurmd
           systemctl restart slurmd
           rm -rf /etc/slurm
