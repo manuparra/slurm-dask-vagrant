@@ -26,11 +26,12 @@ Vagrant.configure("2") do |config|
       sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
       dnf install -y epel-release
       dnf config-manager --set-enabled powertools
-      dnf install -y munge wget git 
+      dnf install -y munge wget git python36
       echo 123456789123456781234567812345678 > /etc/munge/munge.key
       chown munge:munge /etc/munge/munge.key
       chmod 600 /etc/munge/munge.key
       systemctl enable --now munge
+      python -m pip install "dask[complete]"
     )
   end
 
@@ -40,9 +41,10 @@ Vagrant.configure("2") do |config|
     node.vm.provision "shell" do |s|
       s.privileged = true,
       s.inline = %q(
-        dnf install -y slurm-slurmctld wget git 
+        dnf install -y slurm-slurmctld wget git python36
         ln -sf /vagrant/slurm.conf /etc/slurm/slurm.conf
         systemctl restart slurmctld
+        python -m pip install "dask[complete]"
       )
     end
   end
@@ -56,11 +58,12 @@ Vagrant.configure("2") do |config|
       node.vm.provision "shell" do |s|
         s.privileged = true,
         s.inline = %q(
-          dnf install -y slurm-slurmd wget git 
+          dnf install -y slurm-slurmd wget git python36
           echo 'SLURMD_OPTIONS=--conf-server rm1' >> /etc/sysconfig/slurmd
           systemctl restart slurmd
           rm -rf /etc/slurm
           ln -sf /var/spool/slurm/d/conf-cache/ /etc/slurm
+          python -m pip install "dask[complete]"
         )
       end
     end
