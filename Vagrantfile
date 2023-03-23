@@ -26,12 +26,13 @@ Vagrant.configure("2") do |config|
       sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
       dnf install -y epel-release
       dnf config-manager --set-enabled powertools
-      dnf install -y munge wget git python36
+      dnf install -y munge wget git gcc python36 python3-devel libtiff-devel libjpeg-devel openjpeg2-devel zlib-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel harfbuzz-devel fribidi-devel libraqm-devel libimagequant-devel libxcb-devel python3-devel redhat-rpm-config python3-pillow python3-pillow-tk
+      dnf group install -y  'Development Tools'
       echo 123456789123456781234567812345678 > /etc/munge/munge.key
       chown munge:munge /etc/munge/munge.key
       chmod 600 /etc/munge/munge.key
       systemctl enable --now munge
-      python -m pip install "dask[complete]"
+      pip3 install "dask[complete]"
     )
   end
 
@@ -41,10 +42,10 @@ Vagrant.configure("2") do |config|
     node.vm.provision "shell" do |s|
       s.privileged = true,
       s.inline = %q(
-        dnf install -y slurm-slurmctld wget git python36
+        dnf install -y slurm-slurmctld wget git python36 python3-devel libtiff-devel libjpeg-devel openjpeg2-devel zlib-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel harfbuzz-devel fribidi-devel libraqm-devel libimagequant-devel libxcb-devel python3-devel redhat-rpm-config python3-pillow python3-pillow-tk
         ln -sf /vagrant/slurm.conf /etc/slurm/slurm.conf
         systemctl restart slurmctld
-        python -m pip install "dask[complete]"
+        pip3 install "dask[complete]"
       )
     end
   end
@@ -58,12 +59,12 @@ Vagrant.configure("2") do |config|
       node.vm.provision "shell" do |s|
         s.privileged = true,
         s.inline = %q(
-          dnf install -y slurm-slurmd wget git python36
+          dnf install -y slurm-slurmd wget git python36 python3-devel libtiff-devel libjpeg-devel openjpeg2-devel zlib-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel harfbuzz-devel fribidi-devel libraqm-devel libimagequant-devel libxcb-devel python3-devel redhat-rpm-config python3-pillow python3-pillow-tk
           echo 'SLURMD_OPTIONS=--conf-server rm1' >> /etc/sysconfig/slurmd
           systemctl restart slurmd
           rm -rf /etc/slurm
           ln -sf /var/spool/slurm/d/conf-cache/ /etc/slurm
-          python -m pip install "dask[complete]"
+          pip3 install "dask[complete]"
         )
       end
     end
