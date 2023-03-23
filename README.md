@@ -2,6 +2,13 @@
 
 Slurm and dask cluster deployed with vagrant
 
+
+Requisites:
+
+- VirtualBox installed
+- Vagrant installed
+- Git installed
+
 Instructions:
 
 1. Clone this repo:
